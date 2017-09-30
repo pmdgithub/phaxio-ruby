@@ -1,21 +1,10 @@
 #!/usr/bin/env rake
 require "bundler/gem_tasks"
 
-require 'rake/testtask'
+require 'rspec/core/rake_task'
 
-Rake::TestTask.new do |t|
-  t.libs << 'test'
-  t.test_files = FileList['test/test*.rb']
-  t.verbose = true
-end
+RSpec::Core::RakeTask.new(:spec)
 
 desc 'Run tests'
-task :default => :test
+task default: :spec
 
-desc 'Run integration tests'
-task :integration_tests do
-  integration_tests_path = File.expand_path(
-    '../test/integration/*_integration_test.rb', __FILE__
-  )
-  FileList[integration_tests_path].each { |file| require file }
-end

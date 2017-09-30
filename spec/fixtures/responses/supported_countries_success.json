@@ -1,0 +1,36 @@
+{
+  "success": true,
+  "message": "Data contains supported countries.",
+  "data":
+    {
+      "United States": {"price_per_page": 7},
+      "Canada": {"price_per_page": 7},
+      "Argentina": {"price_per_page": 10},
+      "Australia": {"price_per_page": 10},
+      "Austria": {"price_per_page": 10},
+      "Belgium": {"price_per_page": 10},
+      "Brazil": {"price_per_page": 10},
+      "Denmark": {"price_per_page": 10},
+      "France": {"price_per_page": 10},
+      "Germany": {"price_per_page": 10},
+      "Greece": {"price_per_page": 10},
+      "Hong Kong": {"price_per_page": 10},
+      "India": {"price_per_page": 10},
+      "Ireland": {"price_per_page": 10},
+      "Israel": {"price_per_page": 10},
+      "Italy": {"price_per_page": 10},
+      "Japan": {"price_per_page": 10},
+      "Jersey": {"price_per_page": 10},
+      "Luxembourg": {"price_per_page": 10},
+      "Netherlands": {"price_per_page": 10},
+      "Norway": {"price_per_page": 10},
+      "Portugal": {"price_per_page": 10},
+      "Puerto Rico": {"price_per_page": 10},
+      "Romania": {"price_per_page": 10},
+      "Spain": {"price_per_page": 10},
+      "South Africa": {"price_per_page": 10},
+      "Sweden": {"price_per_page": 10},
+      "Switzerland": {"price_per_page": 10},
+      "United Kingdom": {"price_per_page": 10}
+    }
+}
