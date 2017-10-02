@@ -51,7 +51,7 @@ describe Phaxio do
     end
   end
 
-  describe 'test_resceive' do
+  describe 'test_receive' do
     let(:phaxio) { Phaxio.test_receive(filename: 'test.pdf') }
     let(:attrs) { parse_json(phaxio.body) }
 
