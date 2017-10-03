@@ -1,12 +1,7 @@
 module Phaxio
-  include  HTTMultiParty
-  base_uri 'https://api.phaxio.com/v1'
-
-  module Config
-    attr_accessor :api_key, :api_secret, :callback_token
-  end
-
   module Client
+    BASE_URI = 'https://api.phaxio.com'
+    API_VERSION = 'v1'
     DIGEST = OpenSSL::Digest.new('sha1')
 
     # Public: Send a fax.
@@ -67,7 +62,7 @@ module Phaxio
     # Returns a HTTParty::Response object containing a success bool,
     # a String message, and an in faxID.
     def send_fax(options)
-      send_post("/send", options)
+      send_post('/send', options)
     end
 
     # Public: Resend a fax.
@@ -82,7 +77,7 @@ module Phaxio
     # Returns a HTTParty::Response object containing a success bool,
     # a message string, and data containing the fax ID int.
     def resend_fax(options)
-      send_post("/resendFax", options)
+      send_post('/resendFax', options)
     end
 
     # Public: Test receiving a fax.
@@ -102,7 +97,7 @@ module Phaxio
     # Returns a HTTParty::Response object containing a success bool
     # and a String message.
     def test_receive(options)
-      send_post("/testReceive", options)
+      send_post('/testReceive', options)
     end
 
     # Public: Provision a phone number that you can use to receive faxes in
@@ -124,7 +119,7 @@ module Phaxio
     # message, and data containing the phone number, city, state, cost,
     # last_billed_at, and the date the number was provisioned at.
     def provision_number(options)
-      send_post("/provisionNumber", options)
+      send_post('/provisionNumber', options)
     end
 
     # Public: Release a phone number that you no longer need. Once a phone
@@ -141,7 +136,7 @@ module Phaxio
     # Returns a HTTParty::Response object containing a success bool and a
     # string message.
     def release_number(options)
-      send_post("/releaseNumber", options)
+      send_post('/releaseNumber', options)
     end
 
     # Public: Get a detailed list of the phone numbers you current own on
@@ -164,7 +159,7 @@ module Phaxio
     # Returns a HTTParty::Reponse object containing a success bool, a message,
     # and the data attributes containing the queried phone number(s) details.
     def list_numbers(options = {})
-      send_post("/numberList", options)
+      send_post('/numberList', options)
     end
 
     # Public: Get an image thumbnail or PDF file for a fax. For images to work
@@ -185,7 +180,7 @@ module Phaxio
     #
     # Returns the fax as the type specified in the call, defaults to PDF.
     def get_fax_file(options)
-      send_post("/faxFile", options)
+      send_post('/faxFile', options)
     end
 
     # Public: List faxes within the specified time range.
@@ -202,7 +197,7 @@ module Phaxio
     # Returns a HTTParty::Response object containing a success bool, a string
     # message, paging information, and the fax data.
     def list_faxes(options)
-      send_post("/faxList", options)
+      send_post('/faxList', options)
     end
 
     # Public: Get the status of a specific fax.
@@ -219,10 +214,10 @@ module Phaxio
     # a String message, and the data of the fax.
     def get_fax_status(options)
       if options[:id].nil?
-        raise StandardError, "You must include a fax id."
+        raise StandardError, 'You must include a fax id.'
       end
 
-      send_post("/faxStatus", options)
+      send_post('/faxStatus', options)
     end
 
     # Public: Cancel a specific fax.
@@ -237,7 +232,7 @@ module Phaxio
     # Returns a HTTParty::Response object containing a success bool
     # and a String message.
     def cancel_fax(options)
-      send_post("/faxCancel", options)
+      send_post('/faxCancel', options)
     end
 
     # Public: Delete a specific fax.
@@ -255,7 +250,7 @@ module Phaxio
     #
     # Returns a HTTParty::Response object with success bool and message string.
     def delete_fax(options)
-      send_post("/deleteFax", options)
+      send_post('/deleteFax', options)
     end
 
     # Public: Get the status of Client's account.
@@ -267,7 +262,7 @@ module Phaxio
     # Returns a HTTParty::Response object with success, message, and data
     # (containing faxes_sent_this_month, faxes_sent_today, and balance).
     def get_account_status
-      send_post("/accountStatus", {})
+      send_post('/accountStatus', {})
     end
 
     # Public: Attach a PhaxCode to a PDF you provide.
@@ -387,7 +382,7 @@ module Phaxio
     #     }
     #   }
     def supported_countries
-      post('/supportedCountries')
+      send_post('/supportedCountries', {})
     end
 
     # Public: List area codes available for purchasing numbers
@@ -422,12 +417,12 @@ module Phaxio
     #     }
     #   }
     def area_codes(options = {})
-      post('/areaCodes', options)
+      send_post('/areaCodes', options)
     end
 
     def send_post(path, options)
-      post(
-        path, query: options.merge!(api_key: api_key, api_secret: api_secret)
+      Typhoeus.post(
+        parse_path(path), body: options.merge!(api_key: api_key, api_secret: api_secret)
       )
     end
 
@@ -485,25 +480,9 @@ module Phaxio
     def generate_file_string(file)
       file[:name] + DIGEST.hexdigest(file[:tempfile].read)
     end
-  end
 
-  # Public: Configure Phaxio with your api_key, api_secret, and the callback
-  #         token provided in your Phaxio account (to verify that requests are
-  #         coming from Phaxio).
-  #
-  # Examples
-  #
-  #   Phaxio.config do |config|
-  #      config.api_key = '12345678910'
-  #      config.api_secret = '10987654321'
-  #      config.callback_token = '32935829'
-  #    end
-  #
-  # Returns nothing.
-  def self.config
-    yield(self)
+    def parse_path(path)
+      URI.parse("#{BASE_URI}/#{API_VERSION}#{path}")
+    end
   end
-
-  extend Client
-  extend Config
 end

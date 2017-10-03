@@ -1,0 +1,7 @@
+{
+  "success": true,
+  "message": "success",
+  "data":{
+    "url": "https://api.phaxio.com/v1/renderPhaxCode/3184mp"
+  }
+}
